@@ -14,6 +14,9 @@ const credentials = {
 	ca: ca
 };
 
+let busTimetable = JSON.parse(fs.readFileSync('bustimetable.json'));
+let busStops = JSON.parse(fs.readFileSync('busstops.json'));
+
 let gps = {
   lat: 0,
   lon: 0,
@@ -30,6 +33,10 @@ httpServer.listen(80, () => {
 	console.log('HTTP Server running on port 80');
 });
 
+httpsServer.listen(443, () => {
+	console.log('HTTPS Server running on port 443');
+});
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -39,7 +46,9 @@ app.use(function(req, res, next) {
 app.post('/gps', logGPS);
 app.get('/clear', clearData);
 app.get('/gpsdata', showData);
+app.get('/times', showTimes);
 app.get('/tile/:z/:x/:y.*', showTile);
+app.get('/delay', showDelay);
 
 // Load map tiles to client side
 function showTile(req,res,next){
@@ -78,20 +87,77 @@ function clearData(req,res,next){
   res.send('Data Cleared')
 }
 
-/*
-IMPLEMENT ON WEDNESDAY
+function showTimes(req,res,next){
+	if (req.query.stop == null) {
+		res.send(busTimetable)
+	}
+	else {
+		res.send(busTimetable[req.query.stop])
+	}
+}
 
-Set up database and add bus timetable:
-you know how :)
+function showDelay(req,res,next){
+	let expectedTime = req.query.eTime
+	let stop = req.query.stop
+	if (stop >= 0 && stop < busStops.stops.length){
+		res.json(calculateDelay(expectedTime,stop))
+	}
+	else {
+		res.json({"status": "FAILED, not a valid stop"})
+	}
+}
 
-PLAN FOR LATENESS:
-database table of stops contains time to travel to next stop.
-when the client wants time remaining it sends the stop id and the time of the arrival they want to check the server.
-the server will go through the values adding up the time between the closest stop to the bus and each stop until it reaches the inteded stop.
-duration of that journey is added to the current time.
-if the total time is signifcantly higher than the planned time, report running late.
-can also be hooked up to a traffic api to add multiplier to duration if traffic is bad.
+function calculateDelay(expectedTime,stop){
+	let foundStop = false;
+	let index = closestStopToBus();
+	let closestStop = index;
+	let time = 0;
+	while (foundStop == false){
+		if (index >= busStops.stops.length){
+			index = 0;
+		}
+		else if (index == stop) {
+			foundStop = true;
+		}
+		else {
+			time += busStops.stops[index][1]
+			index++
+		}
+	}
+	return ({
+		"eta": time,
+		"closestStop": busStops.stops[closestStop][0]
+	})
+}
 
-IF TIME:
-add getting bus times from the database so the client is no longer fake.
-*/
+function closestStopToBus(){
+	let shortestDistance = 999999;
+	let closestStop;
+	let currentGPS = gps
+	for (let index = 0; index < busStops.stops.length; index++){
+			let distance = distanceBetween2Points(currentGPS.lat, currentGPS.lon, busStops.stops[index][2][0], busStops.stops[index][2][1])
+			if (distance < shortestDistance){
+				closestStop = index;
+				shortestDistance = distance
+			}
+	}
+	return closestStop
+}
+
+function distanceBetween2Points(lat1,lon1,lat2,lon2) {
+  let earthRadius = 6371;
+  let dLat = deg2rad(lat2-lat1);
+  let dLon = deg2rad(lon2-lon1);
+  let a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ;
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  let d = earthRadius * c;
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}

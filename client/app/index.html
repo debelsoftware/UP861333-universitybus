@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../master.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <img id="menu-button" src="../menu.svg" alt="">
+      <h2>UniBus</h2>
+    </nav>
+    <nav id="mobile-nav" class="mobile-nav">
+      <a href="#">Stop Finder</a>
+      <a href="#">Timetable Sync</a>
+      <a href="#">Live Tracker</a>
+    </nav>
+    <main>
+      <div class="stop">
+        <h2>Francis Avenue</h2>
+        <img src="../edit.svg" alt="" id="change-stop">
+      </div>
+      <div class="card" id="track-dialog">
+        <h3>Where is the bus?</h3>
+        <a href="../tracker">Live Tracker</a>
+      </div>
+      <div class="card">
+        <h2>16:27</h2>
+        <h2 id="lateness">On Time<img src="../live.svg" alt="" id="live"></h2>
+      </div>
+      <div class="card">
+        <h2>16:45</h2>
+        <h2 id="lateness">2 mins late<img src="../live.svg" alt="" id="live"></h2>
+      </div>
+      <div class="card">
+        <h2>17:05</h2>
+        <h2 id="lateness">On Time</h2>
+      </div>
+      <div class="card">
+        <h2>17:26</h2>
+        <h2 id="lateness">On Time</h2>
+      </div>
+      <div class="card">
+        <h2>17:38</h2>
+        <h2 id="lateness">On Time</h2>
+      </div>
+    </main>
+  </body>
+  <script src="../menu.js" charset="utf-8"></script>
+</html>

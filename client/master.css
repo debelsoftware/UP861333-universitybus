@@ -128,10 +128,13 @@ a{
   border-radius: 3px;
   margin-bottom: 10px;
 }
-.stop h2{
-  display: inline;
-  vertical-align: middle;
+.stop select{
   color: white;
+  font-family: 'gilroy-extrabold';
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 20px;
+  width:90%;
+  text-align: center;
 }
 #change-stop{
   display: inline;

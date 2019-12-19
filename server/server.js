@@ -16,6 +16,14 @@ const credentials = {
 
 //let busTimetable = JSON.parse(fs.readFileSync('bustimetable.json'));
 let busStops = JSON.parse(fs.readFileSync('busstops.json'));
+let simTrack = JSON.parse(fs.readFileSync('route2.json'));
+
+const simulateBus = true;
+let trackPoint = 0;
+
+if (simulateBus) {
+	setInterval(function(){ updateTrack(); }, 3000);
+}
 
 let gps = {
   lat: 0,
@@ -36,6 +44,18 @@ httpServer.listen(80, () => {
 httpsServer.listen(443, () => {
 	console.log('HTTPS Server running on port 443');
 });
+
+function updateTrack(){
+	if (trackPoint == simTrack.features.length) {
+		trackPoint=0;
+	}
+	gps = {
+		lat: simTrack.features[trackPoint].geometry.coordinates[1],
+		lon: simTrack.features[trackPoint].geometry.coordinates[0],
+		time: "simulated"
+	}
+	trackPoint++
+}
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -116,6 +136,7 @@ function calculateDelay(expectedTime,stop){
 	let index = closestStopToBus();
 	let closestStop = index;
 	let time = 0;
+	let status = "On Time"
 	while (foundStop == false){
 		if (index >= busStops.stops.length){
 			index = 0;
@@ -128,10 +149,21 @@ function calculateDelay(expectedTime,stop){
 			index++
 		}
 	}
+	let timeOffset = getOffsetTime(time);
+	if (timeOffset > parseInt(expectedTime) + 600) {
+		status = "Late"
+	}
 	return ({
-		"eta": time,
+		"status": status,
+		"eta": timeOffset,
 		"closestStop": busStops.stops[closestStop][0]
 	})
+}
+
+function getOffsetTime(estimatedMinutes){
+	let time = new Date();
+	let calculatedTime = (time.getTime())+((estimatedMinutes*60)*1000)
+	return Math.floor(calculatedTime/1000)
 }
 
 function closestStopToBus(){
@@ -156,7 +188,6 @@ function distanceBetween2Points(lat1,lon1,lat2,lon2) {
     Math.sin(dLat/2) * Math.sin(dLat/2) +
     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
     Math.sin(dLon/2) * Math.sin(dLon/2)
-    ;
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   let d = earthRadius * c;
   return d;

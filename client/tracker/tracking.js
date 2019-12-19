@@ -15,26 +15,26 @@ updateTrack(true);
 setInterval(function() {updateTrack(false)}, 5000);
 function updateTrack(init){
   fetch('https://unibusapi.live/gpsdata')
-    .then(
-      function(response) {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        }
-        response.json().then(function(data) {
-          console.log(data);
-          if (init) {
-            busMarker = L.marker([data.lat, data.lon],{icon: busIcon}).addTo(map)
-          }
-          else {
-            busMarker.setLatLng([data.lat, data.lon]);
-          }
-
-        });
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
       }
-    )
-    .catch(function(err) {
-      console.log('Fetch Error :-S', err);
-    });
-  }
+      response.json().then(function(data) {
+        console.log(data);
+        if (init) {
+          busMarker = L.marker([data.lat, data.lon],{icon: busIcon}).addTo(map)
+        }
+        else {
+          busMarker.setLatLng([data.lat, data.lon]);
+        }
+
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+}

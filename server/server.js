@@ -14,7 +14,7 @@ const credentials = {
 	ca: ca
 };
 
-let busTimetable = JSON.parse(fs.readFileSync('bustimetable.json'));
+//let busTimetable = JSON.parse(fs.readFileSync('bustimetable.json'));
 let busStops = JSON.parse(fs.readFileSync('busstops.json'));
 
 let gps = {
@@ -87,12 +87,16 @@ function clearData(req,res,next){
   res.send('Data Cleared')
 }
 
+function stopNumberToName(){
+
+}
+
 function showTimes(req,res,next){
 	if (req.query.stop == null) {
-		res.send(busTimetable)
+		res.send(busStops)
 	}
 	else {
-		res.send(busTimetable[req.query.stop])
+		res.send(busStops.stops[req.query.stop][3])
 	}
 }
 

@@ -12,6 +12,7 @@ function init(){
 }
 
 function getTimes(){
+  document.getElementById('busTimes').innerHTML="<img id='loading' src='../loading.svg'>";
   fetch(`https://unibusapi.live/times?stop=${stopID}`)
   .then(
     function(response) {
@@ -42,7 +43,9 @@ async function populateTimes(data){
      busTime.textContent = time
      if (first) {
        let expectedTime = new Date(Date.UTC(currentTime.getFullYear(),currentTime.getMonth(),currentTime.getDate(), time.substr(0, 2),time.substr(2, 2),'00'))
-       console.log(Math.floor(expectedTime.getTime()/1000));
+       img.src = "../loading.svg"
+       img.id = "live"
+       lateness.appendChild(img)
        fetch(`https://unibusapi.live/delay?stop=${stopID}&eTime=${Math.floor(expectedTime.getTime()/1000)}`)
        .then(
          function(response) {
@@ -53,7 +56,7 @@ async function populateTimes(data){
            response.json().then(function(data) {
              if (data.status == "Late") {
                let latenessDate = new Date(data.eta*1000)
-               lateness.textContent = `Expected ${latenessDate.getHours()}${latenessDate.getMinutes()}`
+               lateness.textContent = `Expected ${leadingZeros(latenessDate.getHours())}${leadingZeros(latenessDate.getMinutes())}`
              }
              else {
                lateness.textContent = `On Time`
@@ -91,4 +94,12 @@ function filterRemaining(data){
     };
   }
   return remaining;
+}
+
+// Adds leading zeros to the hours and minutes
+function leadingZeros(number){
+  if (number < 10) {
+    number = "0" + number;
+  }
+  return number;
 }

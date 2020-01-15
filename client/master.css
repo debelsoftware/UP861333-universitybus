@@ -7,13 +7,20 @@
 }
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
+/*#1e8ae8*/
+
+:root{
+  --mainBlue: #1e8ae8;
+}
+
 body,html{
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
   background-color: #f5f5f5
 }
 main{
-  margin-top: 60px;
+  margin-top: 50px;
   text-align: center;
 }
 p{
@@ -35,7 +42,7 @@ h1,h2,h3,h4{
   margin: 0;
   width: 100%;
   padding: 10px;
-  background-color: #1e8ae8;
+  background-color: var(--mainBlue);
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 .mobile-nav{
@@ -47,7 +54,7 @@ h1,h2,h3,h4{
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(5px);
   text-align: center;
 }
@@ -109,7 +116,7 @@ a{
   padding: 15px;
   margin-bottom: 10px;
   border: 1px solid white;
-  border-top: 5px solid #1e8ae8;
+  border-top: 5px solid var(--mainBlue);
 }
 .card:hover{
   cursor: pointer;
@@ -119,22 +126,32 @@ a{
   vertical-align: middle;
 }
 .stop{
-  background-color: #363636;
-  width: 80%;
-  max-width: 500px;
+  background-color: var(--mainBlue);
+  width: 100%;
   margin: auto;
-  padding: 15px;
+  padding: 30px 0 20px 0;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
-  margin-bottom: 10px;
 }
 .stop select{
+  text-align: center;
+  text-align-last: center;
   color: white;
   font-family: 'gilroy-extrabold';
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0);
+  border: 0;
+  border-bottom: 3px solid white;
+  border-radius: 3px;
+  outline: 0;
   font-size: 20px;
-  width:90%;
+  width:80%;
   text-align: center;
+}
+.stop h4{
+  color: white;
+}
+option{
+  background: var(--mainBlue);
+  color: white;
 }
 #change-stop{
   display: inline;
@@ -167,4 +184,9 @@ a{
 }
 #loading{
   width: 50px;
+}
+#curve{
+  margin: 0;
+  margin-bottom: 20px;
+  width: 100vw;
 }

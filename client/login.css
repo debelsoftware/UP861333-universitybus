@@ -7,5 +7,18 @@
   margin: auto;
 }
 #login{
+  display: none;
   background-color: #621360;
+}
+#loading{
+  margin: auto;
+}
+#switch{
+  display: none;
+}
+p{
+  color: var(--mainColor)
+}
+span{
+  font-weight: bold;
 }

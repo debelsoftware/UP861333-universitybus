@@ -2,19 +2,31 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="master.css">
     <link rel="stylesheet" href="login.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#1e8ae8">
+    <meta name="msapplication-TileColor" content="#1e8ae8">
+    <meta name="theme-color" content="#1e8ae8">
+    <title>Port Uni Bus</title>
   </head>
   <body>
     <div class="card" id="login-dialog">
       <h1>Welcome to UniBus Portsmouth</h1>
       <hr>
       <h4>The new smart way to use the university bus</h4>
-      <a id="login" href="./app">Login with MyPort</a>
+      <img id="loading" src="loading.svg" alt="">
+      <a id="login">Login with MyPort</a>
+      <p id="switch">or <span>change account<span></p>
     </div>
   </body>
+  <script src="login.js" charset="utf-8"></script>
+  <script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){};pageLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
 </html>

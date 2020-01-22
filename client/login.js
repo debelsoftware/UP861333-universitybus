@@ -72,19 +72,23 @@ function getTimetableData() {
       }
     }
     if (timetableID != "null") {
+      const weekRange = getWeekRange()
+      console.log(weekRange.startWeek);
+      console.log(weekRange.endWeek);
       gapi.client.calendar.events.list({
         'calendarId': timetableID,
-        'timeMin': (new Date()).toISOString(),
+        'timeMin': weekRange.startWeek,
+        'timeMax': weekRange.endWeek,
         'showDeleted': false,
         'singleEvents': true,
-        'maxResults': 10,
+        'maxResults': 20,
         'orderBy': 'startTime'
       }).then(function(response) {
-        let events = response.result.items;
+        sessionStorage.setItem('ttdata', JSON.stringify(response.result.items));
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('name', profile.getBasicProfile().getGivenName());
+        window.location.href = "./setup";
       });
-      localStorage.setItem('token', token);
-      localStorage.setItem('name', profile.getBasicProfile().getGivenName());
-      window.location.href = "./setup";
     }
     else {
       alert("Couldn't find your timetable")
@@ -92,4 +96,17 @@ function getTimetableData() {
       signInButton.style.display = "block";
     }
   });
+}
+
+function getWeekRange(){
+  let curr = new Date
+  let first = curr.getDate() - curr.getDay() + 1
+  let firstDay = new Date(curr.setDate(first))
+  let lastDay = new Date(curr.setDate(first + 7))
+  firstDay.setHours(00,00,00);
+  lastDay.setHours(00,00,00);
+  return{
+    startWeek: firstDay.toISOString(),
+    endWeek: lastDay.toISOString()
+  }
 }

@@ -41,6 +41,9 @@
         </select>
       </div>
       <img id="curve" src="../bottomcurve.svg" alt="">
+      <div class="card">
+        <canvas id="graph" width="400" height="200"></canvas>
+      </div>
       <div class="card" id="track-dialog">
         <h3>Where is the bus?</h3>
         <a href="../tracker">Live Tracker</a>
@@ -51,6 +54,8 @@
       </div>
     </main>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" charset="utf-8"></script>
+  <script src="../config.js" charset="utf-8"></script>
   <script src="../menu.js" charset="utf-8"></script>
   <script src="./app.js" charset="utf-8"></script>
 </html>

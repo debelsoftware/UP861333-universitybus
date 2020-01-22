@@ -43,7 +43,6 @@ h1,h2,h3,h4{
   width: 100%;
   padding: 10px;
   background-color: var(--mainBlue);
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 .mobile-nav{
   display: none;
@@ -189,4 +188,6 @@ option{
   margin: 0;
   margin-bottom: 20px;
   width: 100vw;
+}
+#graph{
 }

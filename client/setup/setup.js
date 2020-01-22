@@ -4,7 +4,7 @@ let graphic = document.getElementById('graphic');
 let nextButton = document.getElementById('next');
 let checkButton;
 nextButton.addEventListener('click', nextSlide);
-text.textContent = `Hey ${localStorage.getItem('name')}, we have a few things we'd like to configure before starting`
+text.textContent = `Hey ${sessionStorage.getItem('name')}, we have a few things we'd like to configure before starting`
 
 function nextSlide(){
   slide++;
@@ -55,11 +55,30 @@ function acceptToggle(){
 }
 
 function syncTimetable(){
-  //add timetable sync here. simulating with timeout
+  let events = JSON.parse(sessionStorage.getItem('ttdata'));
   setTimeout(function () {
-    graphic.src = "../tick.gif"
-    nextButton.disabled = false;
-    text.textContent = "All done!";
-    document.getElementById("explain-text").textContent = "Setup is complete, you're ready to use the app."
+    fetch(host+"/synctt", {
+      method: 'POST',
+      body: JSON.stringify({
+        "token": sessionStorage.getItem('token'),
+        "ttdata": events
+      }),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if (response.status == 200){
+        graphic.src = "../tick.gif"
+        nextButton.disabled = false;
+        text.textContent = "All done!";
+        document.getElementById("explain-text").textContent = "Setup is complete, you're ready to use the app."
+      }
+      else {
+        graphic.src = "../tick.gif"
+        text.textContent = "Sync failed";
+        document.getElementById("explain-text").textContent = "Unfortunetely something went wrong, plese try again later."
+      }
+    })
+    .catch(error => console.log(error));
   }, 3000);
 }

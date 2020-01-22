@@ -103,3 +103,28 @@ function leadingZeros(number){
   }
   return number;
 }
+
+
+const domGraph = document.getElementById('graph').getContext('2d');
+const graph = new Chart(domGraph, {
+    type: 'line',
+    data: {
+        labels: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+        datasets: [{
+            label: 'Busyness',
+            data: [12, 19, 3, 5, 2, 3, 5, 1, 2, 7, 4],
+            pointRadius: 0,
+            backgroundColor: '#1e8ae8',
+            borderWidth: 0
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    display: false
+                }
+            }]
+        }
+    }
+});

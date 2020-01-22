@@ -5,7 +5,7 @@ L.tileLayer('https://unibusapi.live/tile/{z}/{x}/{y}.png', {
   minZoom: 14
 }).addTo(map);
 let busMarker;
-var busIcon = L.icon({
+let busIcon = L.icon({
     iconUrl: 'busicon.png',
     iconSize: [30, 30]
 });

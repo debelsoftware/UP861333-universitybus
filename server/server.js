@@ -64,6 +64,7 @@ app.use(function(req, res, next) {
 });
 
 app.post('/gps', logGPS);
+app.post('/synctt', synctt);
 app.get('/clear', clearData);
 app.get('/gpsdata', showData);
 app.get('/times', showTimes);
@@ -195,4 +196,18 @@ function distanceBetween2Points(lat1,lon1,lat2,lon2) {
 
 function deg2rad(deg) {
   return deg * (Math.PI/180)
+}
+
+//-----------------------USER DATA----------------------------------
+
+function synctt(req,res,next){
+	const events = req.body.ttdata
+	for (let userEvent of events){
+		console.log(`${userEvent.summary} ${userEvent.location} ${userEvent.start.dateTime}`);
+	}
+	res.sendStatus(200);
+}
+
+function dateToDay(date){
+
 }

@@ -44,16 +44,20 @@ function initClient() {
     gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
     profile = gapi.auth2.getAuthInstance().currentUser.get()
     token = profile.getAuthResponse().id_token
-    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get(), true);
     signInButton.onclick = signInButtonClick;
   }, function(error) {
   });
 }
 
-function updateSigninStatus(isSignedIn) {
-  loadingImg.style.display = "none";
-  signInButton.style.display = "block";
-  if (isSignedIn) {
+function updateSigninStatus(isSignedIn, auto=false) {
+  if (!isSignedIn) {
+    loadingImg.style.display = "none";
+    signInButton.style.display = "block";
+  }
+  if (isSignedIn && auto) {
+    loadingImg.style.display = "none";
+    signInButton.style.display = "block";
     accountSignedIn = true;
     signInButton.textContent = `Continue as ${profile.getBasicProfile().getEmail()}`
     accountSwitch.style.display = "block";
@@ -63,7 +67,6 @@ function updateSigninStatus(isSignedIn) {
 function getTimetableData() {
   let timetableID = "null";
   gapi.client.calendar.calendarList.list().then(function(response) {
-    console.log(response.result.items);
     if (response.result.items.length >= 1){
       for (calendar of response.result.items){
         if (calendar.summary == "UoP Timetable"){
@@ -84,10 +87,52 @@ function getTimetableData() {
         'maxResults': 20,
         'orderBy': 'startTime'
       }).then(function(response) {
-        sessionStorage.setItem('ttdata', JSON.stringify(response.result.items));
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('name', profile.getBasicProfile().getGivenName());
-        window.location.href = "./setup";
+        let events = response.result.items;
+        fetch(host+"/userstatus", {
+          method: 'POST',
+          body: JSON.stringify({
+            "token": token,
+          }),
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        }).then(function(response) {
+          if (response.status == 200){
+            return response.json();
+          }
+          else {
+            console.log("error");
+          }
+        })
+        .then(function(jsonResponse) {
+          sessionStorage.setItem('ttdata', JSON.stringify(events));
+          sessionStorage.setItem('token', token);
+          sessionStorage.setItem('name', profile.getBasicProfile().getGivenName());
+          if (jsonResponse.userRegistered == false){
+            window.location.href = "./setup";
+          }
+          else {
+            fetch(host+"/synctt", {
+              method: 'POST',
+              body: JSON.stringify({
+                "token": token,
+                "ttdata": events
+              }),
+              headers:{
+                'Content-Type': 'application/json'
+              }
+            }).then(function(response) {
+              if (response.status == 200){
+                window.location.href = "./app"
+              }
+              else {
+                alert("An error occured while syncing your timetable");
+              }
+            })
+            .catch(error => alert("An error occured while syncing your timetable"));
+          }
+        })
+        .catch(error => alert("An error occured while getting your details"));
       });
     }
     else {

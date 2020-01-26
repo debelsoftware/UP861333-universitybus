@@ -3,6 +3,7 @@ let text = document.getElementById('text-content');
 let graphic = document.getElementById('graphic');
 let nextButton = document.getElementById('next');
 let checkButton;
+
 nextButton.addEventListener('click', nextSlide);
 text.textContent = `Hey ${sessionStorage.getItem('name')}, we have a few things we'd like to configure before starting`
 
@@ -38,7 +39,7 @@ function nextSlide(){
     explainText.textContent = "We're syncing your timetable with our servers."
     document.getElementById('content').appendChild(explainText);
     document.getElementById('checkbox').style.display = "none";
-    syncTimetable()
+    syncTimetable(false)
   }
   else if (slide==4) {
     window.location.href = "../app";
@@ -54,7 +55,7 @@ function acceptToggle(){
   }
 }
 
-function syncTimetable(){
+function syncTimetable(onlysync){
   let events = JSON.parse(sessionStorage.getItem('ttdata'));
   setTimeout(function () {
     fetch(host+"/synctt", {

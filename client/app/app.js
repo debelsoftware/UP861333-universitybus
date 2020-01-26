@@ -26,7 +26,7 @@ function getTimes(){
     }
   )
   .catch(function(err) {
-    console.log('Fetch Error :-S', err);
+    alert('Sorry, we were unable to load the timetable');
   });
 }
 

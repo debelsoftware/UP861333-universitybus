@@ -20,42 +20,39 @@
     </nav>
     <nav id="mobile-nav" class="mobile-nav">
       <a href="#">Stop Finder</a>
-      <a href="../timetable">Timetable Sync</a>
+      <a href="#">Timetable Sync</a>
       <a href="#">Live Tracker</a>
     </nav>
-    <main>
-      <div class="stop">
-        <h4>Select a stop</h4>
-        <select id="stopSelect" class="" name="">
-          <option value="0">University of Portsmouth</option>
-          <option value="1">Elm Grove</option>
-          <option value="2">Kings Theatre</option>
-          <option value="3">Festing Hotel</option>
-          <option value="4">Eastney Health Centre</option>
-          <option value="5">Bransbury Park</option>
-          <option value="6">Prince Albert Road</option>
-          <option value="7">Francis Avenue</option>
-          <option value="8">Fratton Bridge</option>
-          <option value="9">Somers Road</option>
-          <option value="10">Winston Churchill Avenue</option>
-        </select>
+    <main id="main">
+      <h2>Monday</h2>
+      <div id="monday">
+
       </div>
-      <img id="curve" src="../bottomcurve.svg" alt="">
-      <div class="card">
-        <canvas id="graph" width="400" height="200"></canvas>
+      <h2>Tuesday</h2>
+      <div id="tuesday">
+
       </div>
-      <div class="card" id="track-dialog">
-        <h3>Where is the bus?</h3>
-        <a href="../tracker">Live Tracker</a>
+      <h2>Wednesday</h2>
+      <div id="wednesday">
+
       </div>
-      <h3>Remaining services today</h3>
-      <div id="busTimes">
-        <img id="loading" src="../loading.svg" alt="">
+      <h2>Thursday</h2>
+      <div id="thursday">
+
+      </div>
+      <h2>Friday</h2>
+      <div id="friday">
+
       </div>
     </main>
+    <style media="screen">
+      main{
+        margin-top: 70px;
+      }
+    </style>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" charset="utf-8"></script>
   <script src="../config.js" charset="utf-8"></script>
   <script src="../menu.js" charset="utf-8"></script>
-  <script src="./app.js" charset="utf-8"></script>
+  <script src="./timetable.js" charset="utf-8"></script>
 </html>

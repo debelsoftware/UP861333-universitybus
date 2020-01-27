@@ -121,6 +121,7 @@ app.post('/gps', logGPS);
 app.post('/synctt', synctt);
 app.post('/userstatus', isRegisteredUser);
 app.post('/timetable', getTimetable);
+app.post('/deleteaccount', deleteAccount);
 app.get('/clear', clearData);
 app.get('/gpsdata', showData);
 app.get('/times', showTimes);
@@ -276,6 +277,29 @@ function distanceBetweenPoints(lat1,lon1,lat2,lon2) {
 }
 
 //-----------------------USER DATA----------------------------------
+
+// deletes the account of the user making the request
+async function deleteAccount(req,res,next){
+	const googleID = await verify(req.body.token)
+	const userRegistered = await searchForUser(googleID);
+	if (userRegistered != "error") {
+		connection.query('DELETE FROM USERS WHERE userID = ?',[googleID],
+			function(err, results, fields) {
+				if (err) {
+					res.sendStatus(400);
+				}
+				else {
+					res.sendStatus(200);
+				}
+			}
+		);
+	}
+	else {
+		res.sendStatus(400)
+	}
+}
+
+// sends the users timetable to the client app
 async function getTimetable(req,res,next){
 	const googleID = await verify(req.body.token)
 	const userRegistered = await searchForUser(googleID);
@@ -288,6 +312,7 @@ async function getTimetable(req,res,next){
 	}
 }
 
+// Creates account if user doesn't already and syncs their timetable
 async function synctt(req,res,next){
 	const googleID = await verify(req.body.token)
 	const events = req.body.ttdata

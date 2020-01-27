@@ -2,10 +2,16 @@ let slide = 1;
 let text = document.getElementById('text-content');
 let graphic = document.getElementById('graphic');
 let nextButton = document.getElementById('next');
+let cancelButton = document.getElementById('cancel');
 let checkButton;
 
 nextButton.addEventListener('click', nextSlide);
+cancelButton.addEventListener('click', cancel);
 text.textContent = `Hey ${sessionStorage.getItem('name')}, we have a few things we'd like to configure before starting`
+
+function cancel(){
+  window.location = "../"
+}
 
 function nextSlide(){
   slide++;

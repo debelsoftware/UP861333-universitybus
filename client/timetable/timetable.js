@@ -1,3 +1,5 @@
+let eventsArray = [[],[],[],[],[]]
+
 window.addEventListener('load', init)
 
 function init(){
@@ -26,24 +28,10 @@ function getEvents(){
   })
   .then(function(jsonResponse) {
     for (let userEvent of jsonResponse){
-      switch(userEvent.day){
-        case "1":
-          document.getElementById("monday").innerHTML += `<div class="card"><h1>${unixToTime(userEvent.startTime)}</h1><h3>${userEvent.name}</h3><h4>${userEvent.location}</h4></div><br>`
-          break
-        case "2":
-          document.getElementById("tuesday").innerHTML += `<div class="card"><h1>${unixToTime(userEvent.startTime)}</h1><h3>${userEvent.name}</h3><h4>${userEvent.location}</h4></div><br>`
-          break
-        case "3":
-          document.getElementById("wednesday").innerHTML += `<div class="card"><h1>${unixToTime(userEvent.startTime)}</h1><h3>${userEvent.name}</h3><h4>${userEvent.location}</h4></div><br>`
-          break
-        case "4":
-          document.getElementById("thursday").innerHTML += `<div class="card"><h1>${unixToTime(userEvent.startTime)}</h1><h3>${userEvent.name}</h3><h4>${userEvent.location}</h4></div><br>`
-          break
-        case "5":
-          document.getElementById("friday").innerHTML += `<div class="card"><h1>${unixToTime(userEvent.startTime)}</h1><h3>${userEvent.name}</h3><h4>${userEvent.location}</h4></div><br>`
-          break
-      }
+      eventsArray[parseInt(userEvent.day)-1].push(userEvent)
     }
+    console.log(eventsArray);
+    populateEvents();
   })
   .catch(error => alert("An error occured while getting your timetable"));
 }
@@ -62,4 +50,19 @@ function leadingZeros(number){
     number = "0" + number;
   }
   return number;
+}
+
+//adds events to the page
+function populateEvents(){
+  const daysOfWeek = ["monday","tuesday","wednesday","thursday","friday"];
+  for (let day = 0; day < 5; day++){
+    if (eventsArray[day].length == 0) {
+      document.getElementById(daysOfWeek[day]).innerHTML = "<h4>No Events</h4>";
+    }
+    else {
+      for (let eventIndex = 0; eventIndex < eventsArray[day].length; eventIndex++) {
+        document.getElementById(daysOfWeek[day]).innerHTML += `<div class="card"><h1>${unixToTime(eventsArray[day][eventIndex].startTime)}</h1><h3>${eventsArray[day][eventIndex].name}</h3><h4>${eventsArray[day][eventIndex].location}</h4></div>`;
+      }
+    }
+  }
 }

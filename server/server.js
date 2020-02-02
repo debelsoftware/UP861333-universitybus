@@ -21,6 +21,7 @@ const credentials = {
 
 let busStops = JSON.parse(fs.readFileSync('busstops.json'));
 let simTrack = JSON.parse(fs.readFileSync('route2.json'));
+let buildings = JSON.parse(fs.readFileSync('buildings.json'));
 
 const simulateBus = true;
 let trackPoint = 0;
@@ -122,6 +123,7 @@ app.post('/synctt', synctt);
 app.post('/userstatus', isRegisteredUser);
 app.post('/timetable', getTimetable);
 app.post('/deleteaccount', deleteAccount);
+app.post('/eventbus', getEventBus);
 app.get('/clear', clearData);
 app.get('/gpsdata', showData);
 app.get('/times', showTimes);
@@ -233,7 +235,7 @@ function calculateDelay(expectedTime,stop){
 		}
 	}
 	let timeOffset = getOffsetTime(time);
-	if (timeOffset > parseInt(expectedTime) + 600) {
+	if (timeOffset > parseInt(expectedTime) + 300) {
 		status = "Late"
 	}
 	return ({
@@ -276,6 +278,74 @@ function distanceBetweenPoints(lat1,lon1,lat2,lon2) {
   return d;
 }
 
+function getStopFromLocation(eventLocation){
+	let stop = -1;
+	for (let building of buildings.buildings){
+		if (eventLocation.toLowerCase().includes(building.name)){
+			stop = building.stop;
+		}
+	}
+	return stop;
+}
+
+
+
+async function getEventBus(req,res,next){
+	const googleID = await verify(req.body.token)
+	const userRegistered = await searchForUser(googleID);
+	if (userRegistered != "error") {
+		connection.query('SELECT * FROM USERS WHERE userID = ?',[googleID],
+			function(err, results, fields) {
+				if (err) {
+					console.log("sql", err);
+					res.sendStatus(400)
+				}
+				else {
+					try {
+						const destinationStop = getStopFromLocation(req.body.location);
+						if (destinationStop != -1) {
+							const eventTime = resetUnix(req.body.startTime);
+							let arriveTime = -1;
+							for (let busTime of busStops.stops[destinationStop][3]){
+								if ((eventTime/1000)-(15 * 60) > fourDigitTimeToUnix(busTime)/1000){ //Checks for bus time arrival at least 15 mins before event
+									arriveTime = busTime;
+								}
+							}
+							let departTime = -1;
+							let found = false;
+							for (let busTime of busStops.stops[results[0].homeStop][3]){
+								if (fourDigitTimeToUnix(busTime)/1000 < fourDigitTimeToUnix(arriveTime)/1000 && !found){ //Checks for bus at home stop before arrival at destination
+									departTime = busTime;
+								}
+								else {
+									found = true;
+								}
+							}
+							res.json({
+								departStop: busStops.stops[results[0].homeStop][0],
+								departTime: departTime,
+								arriveStop: busStops.stops[destinationStop][0],
+								arriveTime: arriveTime
+							})
+						}
+						else {
+							console.log("stop");
+							res.sendStatus(400)
+						}
+					} catch (e) {
+						console.log("crash",e);
+						res.sendStatus(400)
+					}
+				}
+			}
+		);
+	}
+	else {
+		console.log("user");
+		res.sendStatus(400);
+	}
+}
+
 //-----------------------USER DATA----------------------------------
 
 // deletes the account of the user making the request
@@ -295,7 +365,7 @@ async function deleteAccount(req,res,next){
 		);
 	}
 	else {
-		res.sendStatus(400)
+		res.sendStatus(400);
 	}
 }
 
@@ -328,6 +398,7 @@ async function synctt(req,res,next){
 						try{
 							let failed = false
 							for (let eventObject of events){
+								console.log(eventObject.summary);
 								connection.query('INSERT INTO EVENTS VALUES(?,?,?,?,?,?)',[googleID,uuidv1(),eventObject.summary,eventObject.location,dateToDay(eventObject.start.dateTime), dateToUnix(eventObject.start.dateTime)],
 						    function(err, results, fields) {
 									if (err) {
@@ -349,7 +420,7 @@ async function synctt(req,res,next){
 				});
 			}
 			else{
-				connection.query('INSERT INTO USERS VALUES(?,?,?)',[googleID,"test","test"],
+				connection.query('INSERT INTO USERS VALUES(?,?)',[googleID,7],
 			    function(err, results, fields) {
 			      if (err) {
 			        res.sendStatus(400);
@@ -384,11 +455,26 @@ async function synctt(req,res,next){
 	}
 }
 
+//converts ISO dates to day
 function dateToDay(isoDate){
 	const date = new Date(isoDate)
 	return date.getDay();
 }
 
+//converts times such as '1812' to unix timestamps
+function fourDigitTimeToUnix(time){
+	let converted = new Date(Date.UTC('1970','00','01', time.substr(0, 2),time.substr(2, 2),'00'));
+	return converted.getTime();
+}
+
+//resets unix time to 1970
+function resetUnix(time){
+	const date = new Date(parseInt(time))
+	let converted = new Date(Date.UTC('1970','00','01', date.getHours(),date.getMinutes(),'00'));
+	return converted.getTime();
+}
+
+//converts ISO dates to unix timestamps
 function dateToUnix(isoDate){
 	const date = new Date(isoDate)
 	return date.getTime();

@@ -1,0 +1,96 @@
+{
+  "buildings":[
+    {
+      "name":"anglesea",
+      "stop": 10
+    },
+    {
+      "name":"buckingham",
+      "stop": 0
+    },
+    {
+      "name":"burnaby",
+      "stop": 0
+    },
+    {
+      "name":"dennis",
+      "stop": 0
+    },
+    {
+      "name":"eldon",
+      "stop": 10
+    },
+    {
+      "name":"hampshire",
+      "stop": 10
+    },
+    {
+      "name":"king henry",
+      "stop": 10
+    },
+    {
+      "name":"lion gate",
+      "stop": 0
+    },
+    {
+      "name":"milldam",
+      "stop": 0
+    },
+    {
+      "name":"park",
+      "stop": 10
+    },
+    {
+      "name":"portland",
+      "stop": 0
+    },
+    {
+      "name":"ravelin",
+      "stop": 0
+    },
+    {
+      "name":"rosalind",
+      "stop": 10
+    },
+    {
+      "name":"spinnaker",
+      "stop": 0
+    },
+    {
+      "name":"st. george",
+      "stop": 0
+    },
+    {
+      "name":"st. andrew",
+      "stop": 10
+    },
+    {
+      "name":"st. michael",
+      "stop": 10
+    },
+    {
+      "name":"learning centre",
+      "stop": 10
+    },
+    {
+      "name":"white swan",
+      "stop": 10
+    },
+    {
+      "name":"william beatty",
+      "stop": 0
+    },
+    {
+      "name":"wiltshire",
+      "stop": 10
+    },
+    {
+      "name":"richmond",
+      "stop": 0
+    },
+    {
+      "name":"future technology",
+      "stop": 0
+    }
+  ]
+}

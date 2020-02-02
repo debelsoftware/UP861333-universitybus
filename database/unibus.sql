@@ -4,8 +4,7 @@ USE unibus;
 
 CREATE TABLE USERS(
 	userID VARCHAR(25) PRIMARY KEY,
-	homeStop VARCHAR(25),
-	defaultStop VARCHAR(10)
+	homeStop INT
 );
 
 CREATE TABLE EVENTS(

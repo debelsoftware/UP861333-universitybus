@@ -1,9 +1,56 @@
 let eventsArray = [[],[],[],[],[]]
 
 window.addEventListener('load', init)
+document.getElementById('close').addEventListener('click', closeEvent)
 
 function init(){
   getEvents()
+}
+
+//closes the opened event
+function closeEvent(){
+  document.getElementById('loading').style.display = "block"
+  document.getElementById('selected').style.display = "none"
+  document.getElementById('backdrop').style.display = "none";
+}
+
+// gets best bus from server and displays it to the user
+function selectEvent(time,location){
+  let token = sessionStorage.getItem('token');
+  console.log(time);
+  console.log(location);
+  document.getElementById('backdrop').style.display = "block";
+  document.getElementById('loading').style.display = "block"
+  document.getElementById('selected').style.display = "none"
+  fetch(host+"/eventbus", {
+    method: 'POST',
+    body: JSON.stringify({
+      "token": token,
+      "startTime": time,
+	    "location": location
+    }),
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  }).then(function(response) {
+    if (response.status == 200){
+      return response.json();
+    }
+    else {
+      alert("failed to get bus times")
+    }
+  })
+  .then(function(jsonResponse) {
+    document.getElementById('selected').style.display = "block"
+    document.getElementById('loading').style.display = "none";
+    document.getElementById('offTime').textContent = jsonResponse.arriveTime;
+    document.getElementById('endStop').textContent = jsonResponse.arriveStop;
+    document.getElementById('onTime').textContent = jsonResponse.departTime;
+    document.getElementById('departStop').textContent = (jsonResponse.departStop + " (Home)");
+    document.getElementById('destination').textContent = location;
+    document.getElementById('arrivalTime').textContent = unixToTime(time);
+  })
+  .catch(error => alert("An error occured while finding a bus time"));
 }
 
 // gets users events from the database
@@ -13,7 +60,7 @@ function getEvents(){
   fetch(host+"/timetable", {
     method: 'POST',
     body: JSON.stringify({
-      "token": token,
+      "token": token
     }),
     headers:{
       'Content-Type': 'application/json'
@@ -27,6 +74,7 @@ function getEvents(){
     }
   })
   .then(function(jsonResponse) {
+    console.log(jsonResponse);
     for (let userEvent of jsonResponse){
       eventsArray[parseInt(userEvent.day)-1].push(userEvent)
     }
@@ -52,6 +100,23 @@ function leadingZeros(number){
   return number;
 }
 
+//creates the event card to be displayed on the app
+function createEventCard(day,eventIndex){
+  let card = document.createElement('div');
+  let eventTime = document.createElement('h1')
+  let eventName = document.createElement('h3')
+  let eventLocation = document.createElement('h4')
+  card.classList.add("card");
+  eventTime.textContent = unixToTime(eventsArray[day][eventIndex].startTime);
+  eventName.textContent = eventsArray[day][eventIndex].name;
+  eventLocation.textContent = eventsArray[day][eventIndex].location;
+  card.appendChild(eventTime);
+  card.appendChild(eventName);
+  card.appendChild(eventLocation);
+  card.addEventListener('click', function(){selectEvent(eventsArray[day][eventIndex].startTime, eventsArray[day][eventIndex].location)})
+  return card
+}
+
 //adds events to the page
 function populateEvents(){
   const daysOfWeek = ["monday","tuesday","wednesday","thursday","friday"];
@@ -61,7 +126,7 @@ function populateEvents(){
     }
     else {
       for (let eventIndex = 0; eventIndex < eventsArray[day].length; eventIndex++) {
-        document.getElementById(daysOfWeek[day]).innerHTML += `<div class="card"><h1>${unixToTime(eventsArray[day][eventIndex].startTime)}</h1><h3>${eventsArray[day][eventIndex].name}</h3><h4>${eventsArray[day][eventIndex].location}</h4></div>`;
+        document.getElementById(daysOfWeek[day]).appendChild(createEventCard(day,eventIndex));
       }
     }
   }

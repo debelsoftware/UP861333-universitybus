@@ -88,7 +88,7 @@ function filterRemaining(data){
   let currentTimeConverted = new Date(Date.UTC('1970','01','01',time.getHours(),time.getMinutes(),'00'));
   let remaining = [];
   for (let index = 0; index < data.length; index++){
-    var converted = new Date(Date.UTC('1970','01','01', data[index].substr(0, 2),data[index].substr(2, 2),'00'));
+    let converted = new Date(Date.UTC('1970','01','01', data[index].substr(0, 2),data[index].substr(2, 2),'00'));
     if((converted.getTime()/1000) > currentTimeConverted.getTime()/1000){
       remaining.push(data[index])
     };

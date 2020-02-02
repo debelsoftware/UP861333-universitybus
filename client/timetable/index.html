@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../master.css">
+    <link rel="stylesheet" href="./timetable.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -14,6 +15,21 @@
     <title>Port Uni Bus</title>
   </head>
   <body>
+    <div id="backdrop" class="backdrop">
+      <img src="../loading.svg" id="loading" alt="">
+      <div id="selected" class="selected">
+        <h2>Recommended Bus</h2>
+        <h1 id="onTime"></h1>
+        <p id="departStop"></p>
+        <img id="mainTrip" src="dots.png" alt="">
+        <h1 id="offTime"></h1>
+        <p id="endStop"></p>
+        <img id="walk" src="walk.png" alt="">
+        <h1 id="arrivalTime"></h1>
+        <p id="destination"></p>
+        <button id="close" type="button" name="button">close</button>
+      </div>
+    </div>
     <nav class="navbar">
       <img id="menu-button" src="../menu.svg" alt="">
       <h2>UniBus</h2>
@@ -46,14 +62,6 @@
 
       </div>
     </main>
-    <style media="screen">
-      main{
-        margin-top: 70px;
-      }
-      .day{
-        margin: 20px auto 20px auto;
-      }
-    </style>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" charset="utf-8"></script>
   <script src="../config.js" charset="utf-8"></script>

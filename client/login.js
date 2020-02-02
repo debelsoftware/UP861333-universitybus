@@ -88,6 +88,7 @@ function getTimetableData() {
         'orderBy': 'startTime'
       }).then(function(response) {
         let events = response.result.items;
+        console.log(events);
         fetch(host+"/userstatus", {
           method: 'POST',
           body: JSON.stringify({

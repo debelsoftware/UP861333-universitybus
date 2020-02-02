@@ -1,0 +1,40 @@
+main{
+  margin-top: 70px;
+}
+.day{
+  margin: 20px auto 20px auto;
+}
+.backdrop{
+  display: none;
+  text-align: center;
+  position: fixed;
+  z-index: 9999;
+  margin: auto;
+  top:0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+}
+.selected{
+  padding: 10px;
+  display: block;
+  background-color: white;
+  text-align: center;
+  margin: 20px;
+  border-top: 8px solid var(--mainBlue);
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.selected p{
+  margin: 0;
+  color: var(--mainColor);
+}
+.selected img{
+  height: 100px;
+}
+#loading{
+  margin: 30px auto 10px auto;
+  width: 40%;
+}

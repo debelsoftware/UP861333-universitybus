@@ -20,7 +20,7 @@ const credentials = {
 //He3zZ6ka3chP29MB
 
 let busStops = JSON.parse(fs.readFileSync('busstops.json'));
-let simTrack = JSON.parse(fs.readFileSync('route2.json'));
+let simTrack = JSON.parse(fs.readFileSync('route.json'));
 let buildings = JSON.parse(fs.readFileSync('buildings.json'));
 
 const simulateBus = true;
@@ -123,6 +123,7 @@ app.post('/synctt', synctt);
 app.post('/userstatus', isRegisteredUser);
 app.post('/timetable', getTimetable);
 app.post('/deleteaccount', deleteAccount);
+app.post('/sethome', setHome);
 app.post('/eventbus', getEventBus);
 app.get('/clear', clearData);
 app.get('/gpsdata', showData);
@@ -346,6 +347,31 @@ async function getEventBus(req,res,next){
 	}
 }
 
+async function setHome(req, res, next){
+	const googleID = await verify(req.body.token)
+	const userRegistered = await searchForUser(googleID);
+	if (userRegistered != "error") {
+		if(Number.isInteger(req.body.stop) && req.body.stop < busStops.stops.length && req.body.stop >= 0){
+			connection.query('UPDATE USERS SET homeStop = ? WHERE userID = ?',[req.body.stop,googleID],
+				function(err, results, fields) {
+					if (err) {
+						res.sendStatus(400);
+					}
+					else {
+						res.sendStatus(200);
+					}
+				}
+			);
+		}
+		else {
+			res.sendStatus(400);
+		}
+	}
+	else {
+		res.sendStatus(400);
+	}
+}
+
 //-----------------------USER DATA----------------------------------
 
 // deletes the account of the user making the request
@@ -398,7 +424,6 @@ async function synctt(req,res,next){
 						try{
 							let failed = false
 							for (let eventObject of events){
-								console.log(eventObject.summary);
 								connection.query('INSERT INTO EVENTS VALUES(?,?,?,?,?,?)',[googleID,uuidv1(),eventObject.summary,eventObject.location,dateToDay(eventObject.start.dateTime), dateToUnix(eventObject.start.dateTime)],
 						    function(err, results, fields) {
 									if (err) {

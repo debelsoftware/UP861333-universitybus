@@ -1,4 +1,6 @@
 let map = L.map('map').setView([50.789910, -1.077576], 13);
+const urlParams = new URLSearchParams(window.location.search);
+
 L.tileLayer('https://unibusapi.live/tile/{z}/{x}/{y}.png', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
   maxZoom: 17,
@@ -35,4 +37,8 @@ function updateTrack(init){
   .catch(function(err) {
     console.log('Fetch Error', err);
   });
+}
+
+if (urlParams.get('lat') != null && urlParams.get('lon') != null) {
+  map.setView([urlParams.get('lat'), urlParams.get('lon')], 17);
 }

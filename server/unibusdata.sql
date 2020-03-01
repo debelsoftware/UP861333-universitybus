@@ -1,4 +1,11 @@
-
-INSERT INTO `EVENTS` VALUES ('118183512168514310928','00181440-4472-11ea-9528-cfd6ed3d286','Distributed Systems And Security','Richmond Building LT2','1',1580133600000),('118183512168514310928','00183b50-4472-11ea-9528-cfd6ed3d286','Distributed Systems And Security','Burnaby 2.24','2',1580216400000),('118183512168514310928','00183b51-4472-11ea-9528-cfd6ed3d286','Engineering Science','Future Technology Centre Floor2','4',1580385600000),('118183512168514310928','00183b52-4472-11ea-9528-cfd6ed3d286','Engineering Science','Future Technology Centre Floor1','5',1580486400000),('117738707108477197020','08ea5ef0-4109-11ea-a334-615c3dcafd2','Statistical Learning','Burnaby 2.26','1',1580115600000),('117738707108477197020','08ea8600-4109-11ea-a334-615c3dcafd2','Stochastic Processes','Lion Gate 1.22','1',1580122800000),('117738707108477197020','08ea8601-4109-11ea-a334-615c3dcafd2','Statistical Learning','Anglesea 1.03','2',1580202000000),('117738707108477197020','08ea8602-4109-11ea-a334-615c3dcafd2','Stochastic Processes','Lion Gate 1.22','2',1580220000000),('117738707108477197020','08ea8603-4109-11ea-a334-615c3dcafd2','Statistical Learning','Future Technology Centre Floor3','4',1580374800000);
-
 INSERT INTO `USERS` VALUES ('117738707108477197020','7'),('118183512168514310928','7');
+
+INSERT INTO `EVENTS` VALUES ('118183512168514310928','00181440-4472-11ea-9528-cfd6ed3d286','Distributed Systems And Security','Richmond Building LT2','1',1580133600000,14),
+('118183512168514310928','00183b50-4472-11ea-9528-cfd6ed3d286','Distributed Systems And Security','Burnaby 2.24','2',1580216400000,13),
+('118183512168514310928','00183b51-4472-11ea-9528-cfd6ed3d286','Engineering Science','Future Technology Centre Floor2','4',1580385600000,12),
+('118183512168514310928','00183b52-4472-11ea-9528-cfd6ed3d286','Engineering Science','Future Technology Centre Floor1','5',1580486400000,16),
+('117738707108477197020','08ea5ef0-4109-11ea-a334-615c3dcafd2','Statistical Learning','Burnaby 2.26','1',1580115600000,9),
+('117738707108477197020','08ea8600-4109-11ea-a334-615c3dcafd2','Stochastic Processes','Lion Gate 1.22','1',1580122800000,11),
+('117738707108477197020','08ea8601-4109-11ea-a334-615c3dcafd2','Statistical Learning','Anglesea 1.03','2',1580202000000,9),
+('117738707108477197020','08ea8602-4109-11ea-a334-615c3dcafd2','Stochastic Processes','Lion Gate 1.22','2',1580220000000,14),
+('117738707108477197020','08ea8603-4109-11ea-a334-615c3dcafd2','Statistical Learning','Future Technology Centre Floor3','4',1580374800000,9);

@@ -104,27 +104,45 @@ function leadingZeros(number){
   return number;
 }
 
+function getDateCode(){
+  let currentDate = new Date();
+  return currentDate.getDay();
+}
 
-const domGraph = document.getElementById('graph').getContext('2d');
-const graph = new Chart(domGraph, {
-    type: 'line',
-    data: {
-        labels: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
-        datasets: [{
-            label: 'Busyness',
-            data: [12, 19, 3, 5, 2, 3, 5, 1, 2, 7, 4],
-            pointRadius: 0,
-            backgroundColor: '#1e8ae8',
-            borderWidth: 0
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    display: false
-                }
-            }]
-        }
+fetch(`https://unibusapi.live/busyness?day=${getDateCode()}`)
+.then(
+  function(response) {
+    if (response.status !== 200) {
+      console.log('Error' + response.status);
+      return;
     }
+    response.json().then(function(data) {
+      const domGraph = document.getElementById('graph').getContext('2d');
+      const graph = new Chart(domGraph, {
+          type: 'line',
+          data: {
+              labels: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+              datasets: [{
+                  label: 'Busyness',
+                  data: data,
+                  pointRadius: 0,
+                  backgroundColor: '#1e8ae8',
+                  borderWidth: 0
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          display: false
+                      }
+                  }]
+              }
+          }
+      });
+    });
+  }
+)
+.catch(function(err) {
+  console.log('Fetch Error :-S', err);
 });

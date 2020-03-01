@@ -130,6 +130,7 @@ app.get('/gpsdata', showData);
 app.get('/times', showTimes);
 app.get('/tile/:z/:x/:y.*', showTile);
 app.get('/delay', showDelay);
+app.get('/busyness', showBusyness);
 
 async function searchForUser(userID){
 	if (userID != "e" && userID != "error") {
@@ -424,9 +425,10 @@ async function synctt(req,res,next){
 						try{
 							let failed = false
 							for (let eventObject of events){
-								connection.query('INSERT INTO EVENTS VALUES(?,?,?,?,?,?)',[googleID,uuidv1(),eventObject.summary,eventObject.location,dateToDay(eventObject.start.dateTime), dateToUnix(eventObject.start.dateTime)],
+								connection.query('INSERT INTO EVENTS VALUES(?,?,?,?,?,?,?)',[googleID,uuidv1(),eventObject.summary,eventObject.location,dateToDay(eventObject.start.dateTime), dateToUnix(eventObject.start.dateTime),dateToHour(eventObject.start.dateTime)],
 						    function(err, results, fields) {
 									if (err) {
+										console.log(err);
 										failed = true
 									}
 								});
@@ -454,9 +456,10 @@ async function synctt(req,res,next){
 							try {
 								let failed = false
 								for (let eventObject of events){
-									connection.query('INSERT INTO EVENTS VALUES(?,?,?,?,?,?)',[googleID,uuidv1(),eventObject.summary,eventObject.location,dateToDay(eventObject.start.dateTime), dateToUnix(eventObject.start.dateTime)],
+									connection.query('INSERT INTO EVENTS VALUES(?,?,?,?,?,?,?)',[googleID,uuidv1(),eventObject.summary,eventObject.location,dateToDay(eventObject.start.dateTime), dateToUnix(eventObject.start.dateTime),dateToHour(eventObject.start.dateTime)],
 							    function(err, results, fields) {
 										if (err) {
+											console.log(err);
 											failed = true;
 										}
 									});
@@ -478,6 +481,21 @@ async function synctt(req,res,next){
 	else {
 		res.sendStatus(400)
 	}
+}
+
+async function showBusyness(req, res, next){
+	let timeArray = [];
+	for (let hour = 8; hour < 19; hour++){
+		let [rows, fields] = await connection.promise().query('SELECT COUNT(*) as eventCount from (select * FROM (SELECT * FROM EVENTS WHERE day = ? AND hour = ? ORDER BY startTime) AS dayEvents group by userID) as totalUnique;',[req.query.day,hour]);
+		timeArray.push(rows[0].eventCount)
+	}
+	res.json(timeArray);
+}
+
+//converts ISO dates to day
+function dateToHour(isoDate){
+	const date = new Date(isoDate)
+	return date.getHours();
 }
 
 //converts ISO dates to day

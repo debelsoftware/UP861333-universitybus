@@ -486,7 +486,7 @@ async function synctt(req,res,next){
 async function showBusyness(req, res, next){
 	let timeArray = [];
 	for (let hour = 8; hour < 19; hour++){
-		let [rows, fields] = await connection.promise().query('SELECT COUNT(*) as eventCount from (select * FROM (SELECT * FROM EVENTS WHERE day = ? AND hour = ? ORDER BY startTime) AS dayEvents group by userID) as totalUnique;',[req.query.day,hour]);
+		let [rows, fields] = await connection.promise().query('SELECT COUNT(*) as eventCount from (select * FROM (SELECT * FROM EVENTS WHERE day = ? ORDER BY startTime) AS dayEvents group by userID) as totalUnique WHERE hour = ?;',[req.query.day,hour]);
 		timeArray.push(rows[0].eventCount)
 	}
 	res.json(timeArray);

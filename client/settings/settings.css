@@ -1,0 +1,11 @@
+#dangerzone{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100vw;
+  background-color: #d4d4d4
+}
+button{
+  width: 80%;
+  max-width: 400px;
+}

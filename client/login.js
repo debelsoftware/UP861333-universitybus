@@ -9,6 +9,7 @@ accountSwitch.addEventListener("click", changeAccount)
 let profile;
 let token;
 let accountSignedIn = false;
+const host = "https://unibusapi.live"
 
 function pageLoad() {
   gapi.load('client:auth2', initClient);

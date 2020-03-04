@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../master.css">
+    <link rel="stylesheet" href="./settings.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -25,8 +26,15 @@
       <a href="../settings">Settings</a>
     </nav>
     <main id="main">
-      <button id="delete-button" type="button" name="button">Delete Account</button>
+      <h3 id="signedInAs">Signed in as:</h3>
+      <button id="sign-out-button" type="button" name="button">Sign out</button>
+      <h3>Set your home stop:</h3>
+      <button id="change-home-button" type="button" name="button">Change Home Stop</button>
+
     </main>
+    <div id="dangerzone">
+      <button id="delete-button" type="button" name="button">Delete Account</button>
+    </div>
     <style media="screen">
       main{
         margin-top: 70px;

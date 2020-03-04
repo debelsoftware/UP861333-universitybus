@@ -166,7 +166,7 @@ function showTile(req,res,next){
   new MBTiles('./mbtiles/portsmouth.mbtiles?mode=rw', function(err, mbtiles) {
     mbtiles.getTile(req.params.z, req.params.x, req.params.y, function(err, data, headers) {
       if (err) {
-        res.status(404)
+        res.sendStatus(404)
       } else {
         res.header("Content-Type", "image/png")
         res.send(data);

@@ -23,7 +23,6 @@ function updateTrack(init){
         return;
       }
       response.json().then(function(data) {
-        console.log(data);
         if (init) {
           busMarker = L.marker([data.lat, data.lon],{icon: busIcon}).addTo(map)
         }

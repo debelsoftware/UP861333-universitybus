@@ -81,7 +81,7 @@ function syncTimetable(onlysync){
         document.getElementById("explain-text").textContent = "Setup is complete, you're ready to use the app."
       }
       else {
-        graphic.src = "../tick.gif"
+        graphic.display = "none"
         text.textContent = "Sync failed";
         document.getElementById("explain-text").textContent = "Unfortunetely something went wrong, plese try again later."
       }

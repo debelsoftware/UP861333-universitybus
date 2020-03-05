@@ -17,8 +17,6 @@ function closeEvent(){
 // gets best bus from server and displays it to the user
 function selectEvent(time,location){
   let token = sessionStorage.getItem('token');
-  console.log(time);
-  console.log(location);
   document.getElementById('backdrop').style.display = "block";
   document.getElementById('loading').style.display = "block"
   document.getElementById('selected').style.display = "none"
@@ -74,11 +72,9 @@ function getEvents(){
     }
   })
   .then(function(jsonResponse) {
-    console.log(jsonResponse);
     for (let userEvent of jsonResponse){
       eventsArray[parseInt(userEvent.day)-1].push(userEvent)
     }
-    console.log(eventsArray);
     populateEvents();
   })
   .catch(error => alert("An error occured while getting your timetable"));

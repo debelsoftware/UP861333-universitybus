@@ -7,7 +7,6 @@ if (navigator.geolocation) {
 }
 
 function getBusStops(gps){
-  console.log(gps);
   setTimeout(function () {
     fetch(`https://unibusapi.live/times`)
     .then(
@@ -68,7 +67,6 @@ function setHomeStop(stop){
 }
 
 function showOptions(stopName,coords, stopID){
-  console.log(coords, stopID);
   document.getElementById('selectedStop').textContent = stopName;
   document.getElementById('options').style.display = "block";
   document.getElementById('viewMap').onclick = function(){window.location = `../tracker?lat=${coords[0]}&lon=${coords[1]}`}
@@ -81,7 +79,6 @@ function closeOptions(){
 }
 
 function assignDistanceAndOrder(data,gps){
-  console.log(data.stops);
   let tempStopArray = []
   let stopID = -1;
   for (let stop of data.stops){

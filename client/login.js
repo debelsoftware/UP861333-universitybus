@@ -77,8 +77,6 @@ function getTimetableData() {
     }
     if (timetableID != "null") {
       const weekRange = getWeekRange()
-      console.log(weekRange.startWeek);
-      console.log(weekRange.endWeek);
       gapi.client.calendar.events.list({
         'calendarId': timetableID,
         'timeMin': weekRange.startWeek,
@@ -89,7 +87,6 @@ function getTimetableData() {
         'orderBy': 'startTime'
       }).then(function(response) {
         let events = response.result.items;
-        console.log(events);
         fetch(host+"/userstatus", {
           method: 'POST',
           body: JSON.stringify({
@@ -146,10 +143,10 @@ function getTimetableData() {
 }
 
 function getWeekRange(){
-  let curr = new Date
-  let first = curr.getDate() - curr.getDay() + 1
-  let firstDay = new Date(curr.setDate(first))
-  let lastDay = new Date(curr.setDate(first + 7))
+  let currentDay = new Date
+  let first = currentDay.getDate() - currentDay.getDay() + 1
+  let firstDay = new Date(currentDay.setDate(first))
+  let lastDay = new Date(currentDay.setDate(first + 7))
   firstDay.setHours(00,00,00);
   lastDay.setHours(00,00,00);
   return{

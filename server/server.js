@@ -492,7 +492,7 @@ async function showBusyness(req, res, next){
 	res.json(timeArray);
 }
 
-//converts ISO dates to day
+//converts ISO dates to hours
 function dateToHour(isoDate){
 	const date = new Date(isoDate)
 	return date.getHours();
@@ -521,4 +521,20 @@ function resetUnix(time){
 function dateToUnix(isoDate){
 	const date = new Date(isoDate)
 	return date.getTime();
+}
+
+//-----------------------------------------MODULE EXPORTS FOR UNIT TESTS------------------------------
+module.exports = {
+	verify: verify,
+	searchForUser: searchForUser,
+	calculateDelay: calculateDelay,
+	getOffsetTime: getOffsetTime,
+	closestStopToBus: closestStopToBus,
+	distanceBetweenPoints: distanceBetweenPoints,
+	getStopFromLocation: getStopFromLocation,
+	dateToHour: dateToHour,
+	dateToDay: dateToDay,
+	fourDigitTimeToUnix: fourDigitTimeToUnix,
+	resetUnix: resetUnix,
+	dateToUnix: dateToUnix
 }

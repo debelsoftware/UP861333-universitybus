@@ -185,10 +185,12 @@ function logGPS(req,res,next){
   res.sendStatus(200)
 }
 
+//Returns most recent GPS data
 function showData(req,res,next){
   res.json(gps)
 }
 
+//Resets the GPS data stored in memory
 function clearData(req,res,next){
   gps = {
     lat: 'n/a',
@@ -198,6 +200,7 @@ function clearData(req,res,next){
   res.send('Data Cleared')
 }
 
+//Returns the bus times for a selected stop or all stops
 function showTimes(req,res,next){
 	if (req.query.stop == null) {
 		res.send(busStops)
@@ -207,6 +210,7 @@ function showTimes(req,res,next){
 	}
 }
 
+//Returns the calculated delay of the bus
 function showDelay(req,res,next){
 	let expectedTime = req.query.eTime
 	let stop = req.query.stop
@@ -218,6 +222,7 @@ function showDelay(req,res,next){
 	}
 }
 
+// calculates the delay of the bus based on the stop and the buses current location
 function calculateDelay(expectedTime,stop){
 	let foundStop = false;
 	let index = closestStopToBus();
@@ -247,12 +252,14 @@ function calculateDelay(expectedTime,stop){
 	})
 }
 
+//Offsets the current time by the calculated delay
 function getOffsetTime(estimatedMinutes){
 	let time = new Date();
 	let calculatedTime = (time.getTime())+((estimatedMinutes*60)*1000)
 	return Math.floor(calculatedTime/1000)
 }
 
+//Locates the bus stop closest to the buses current location
 function closestStopToBus(){
 	let shortestDistance = 999999;
 	let closestStop;
@@ -267,6 +274,8 @@ function closestStopToBus(){
 	return closestStop
 }
 
+//algorithm for calculating the distance between 2 sets of coordinates
+//Based on the haversine formula found here http://www.movable-type.co.uk/scripts/latlong.html
 function distanceBetweenPoints(lat1,lon1,lat2,lon2) {
   let earthRadius = 6371;
   let dLat = (lat2-lat1) * (Math.PI/180);
@@ -280,6 +289,7 @@ function distanceBetweenPoints(lat1,lon1,lat2,lon2) {
   return d;
 }
 
+//Returns the closest stop for a given location
 function getStopFromLocation(eventLocation){
 	let stop = -1;
 	for (let building of buildings.buildings){
@@ -290,8 +300,7 @@ function getStopFromLocation(eventLocation){
 	return stop;
 }
 
-
-
+//Find the ideal bus for an event
 async function getEventBus(req,res,next){
 	const googleID = await verify(req.body.token)
 	const userRegistered = await searchForUser(googleID);
@@ -348,6 +357,7 @@ async function getEventBus(req,res,next){
 	}
 }
 
+//Sets a users home location
 async function setHome(req, res, next){
 	const googleID = await verify(req.body.token)
 	const userRegistered = await searchForUser(googleID);
@@ -483,6 +493,7 @@ async function synctt(req,res,next){
 	}
 }
 
+//gets the busyness for a given day
 async function showBusyness(req, res, next){
 	let timeArray = [];
 	for (let hour = 8; hour < 19; hour++){

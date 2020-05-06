@@ -33,11 +33,10 @@ def main():
         except:
             print("connection lost, will try agin in 5 seconds")
         time.sleep(5)
-        
+
         
 gpsService = threading.Thread(name='gps service', target=gpsLogger)
 mainThread = threading.Thread(name='main', target=main)
 
 gpsService.start()
 mainThread.start()
-    
